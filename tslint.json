@@ -1,0 +1,30 @@
+{
+    "defaultSeverity": "error",
+    "extends": ["tslint:recommended"],
+    "jsRules": {
+      "no-console": false
+    },
+    "rules": {
+      "variable-name": [
+        true,
+        "ban-keywords",
+        "check-format",
+        "allow-leading-underscore"
+      ],
+      "no-floating-promises": true,
+      "no-async-without-await": true,
+      "promise-function-async": true
+    },
+    "rulesDirectory": [],
+    "linterOptions": {
+      "exclude": [
+        "node_modules/**/*.ts",
+        "dist/**/*.ts",
+        "coverage/**",
+        ".serverless/**",
+        ".build/**",
+        "mock/**"
+      ]
+    }
+  }
+  

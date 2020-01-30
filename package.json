@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "description": "rent-house app",
   "main": "index.js",
+  "scripts": {
+    "tslint":"tslint --project tsconfig.json"
+  },
   "author": "vnd",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "tslint": "6.0.0",
+    "typescript": "3.7.5"
+  }
 }
