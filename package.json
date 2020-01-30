@@ -1,0 +1,8 @@
+{
+  "name": "house-service",
+  "version": "1.0.0",
+  "description": "rent-house app",
+  "main": "index.js",
+  "author": "vnd",
+  "license": "MIT"
+}
