@@ -6,6 +6,7 @@ import {
 } from "aws-lambda";
 import { buildApiGatewayOkResponse } from "aws-lambda-response-builder";
 import { cardDesignModel } from "./model";
+import { houseService } from "./service";
 
 export class HouseHandler {
   @connectDb
@@ -13,11 +14,13 @@ export class HouseHandler {
     event: APIGatewayProxyEvent,
     context: Context
   ): Promise<APIGatewayProxyResult> {
-    const a= await cardDesignModel.create({
+    const a = await cardDesignModel.create({
       cardDesignId: "123456"
-    })
+    });
+    const result =  await houseService.getHouses(1, 3);
     console.log(a);
-    return buildApiGatewayOkResponse({ response: "ok" });
+    console.log(result);
+    return buildApiGatewayOkResponse({ response: result });
   }
 }
 

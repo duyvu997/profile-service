@@ -2,7 +2,7 @@
   "name": "house-service",
   "version": "1.0.0",
   "description": "rent-house app",
-  "main": "index.js",
+  "main": "handler.js",
   "scripts": {
     "tslint": "tslint --project tsconfig.json"
   },
