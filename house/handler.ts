@@ -17,7 +17,7 @@ export class HouseHandler {
       cardDesignId: "123456"
     })
     console.log(a);
-    return buildApiGatewayOkResponse({ response: "ok" });
+    return buildApiGatewayOkResponse({ response: "ok123" });
   }
 }
 
