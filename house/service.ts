@@ -1,8 +1,8 @@
 import { houseRepository } from "./repo";
 
 export class HouseService {
-    public async getHouses(offset: number, limit: number){
-        return houseRepository.getHouses(offset, limit);
-    }
+  public async getHouses(offset: string, limit: string) {
+    return houseRepository.getHouses(Number(offset), Number(limit));
+  }
 }
-export const houseService =  new HouseService()
+export const houseService = new HouseService();

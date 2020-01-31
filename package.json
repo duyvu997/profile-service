@@ -4,24 +4,39 @@
   "description": "rent-house app",
   "main": "handler.js",
   "scripts": {
+    "test": "mocha --timeout 10000 --exit -r ts-node/register './**/*.spec.ts' ",
     "tslint": "tslint --project tsconfig.json"
   },
   "author": "vnd",
   "license": "MIT",
   "devDependencies": {
     "@types/aws-lambda": "8.10.40",
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.7",
+    "@types/sinon": "^7.0.13",
     "@types/mongoose": "5.7.0",
     "@types/node": "13.5.2",
+    "@types/triple-beam": "1.3.0",
     "serverless": "1.62.0",
     "serverless-offline": "5.12.1",
     "serverless-plugin-typescript": "1.1.9",
     "tslint": "6.0.0",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.0",
+    "mongo-unit": "^1.4.4",
+    "sinon": "^7.4.1",
+    "ts-node": "^8.3.0",
     "typescript": "3.7.5"
   },
   "dependencies": {
     "@hasezoey/typegoose": "5.9.2",
     "aws-lambda": "1.0.5",
     "aws-lambda-response-builder": "1.0.11",
-    "mongoose": "5.8.10"
+    "class-transformer": "^0.2.3",
+    "class-transformer-validator": "^0.8.0",
+    "class-validator": "0.10.1",
+    "mongoose": "5.8.10",
+    "triple-beam": "1.3.0",
+    "winston": "3.2.1"
   }
 }

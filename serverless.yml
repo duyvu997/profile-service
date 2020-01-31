@@ -32,5 +32,5 @@ functions:
 
 custom:
   mongoUri:
-    local: "mongodb://localhost:27017/house"
+    local: mongodb://localhost:27017/house
     dev: ${ssm:/renthouse/house/dev/mongoUri}

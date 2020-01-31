@@ -4,9 +4,14 @@ import {
   Context,
   APIGatewayProxyResult
 } from "aws-lambda";
-import { buildApiGatewayOkResponse } from "aws-lambda-response-builder";
-import { cardDesignModel } from "./model";
+import {
+  buildApiGatewayOkResponse,
+  buildApiGatewayServerFailure
+} from "aws-lambda-response-builder";
 import { houseService } from "./service";
+import { transformAndValidate } from "class-transformer-validator";
+import { GetHouseRequest } from "./handler.model";
+import { logger } from "../common/logger";
 
 export class HouseHandler {
   @connectDb
@@ -14,12 +19,19 @@ export class HouseHandler {
     event: APIGatewayProxyEvent,
     context: Context
   ): Promise<APIGatewayProxyResult> {
-    const a = await cardDesignModel.create({
-      cardDesignId: "123456"
-    });
-    const result =  await houseService.getHouses(1, 3);
-    console.log(a);
-    console.log(result);
+    let request: GetHouseRequest;
+    try {
+      request = await transformAndValidate(
+        GetHouseRequest,
+        event.queryStringParameters || {}
+      );
+    } catch (error) {
+      logger.error(JSON.stringify(error));
+      return buildApiGatewayServerFailure();
+    }
+    const { limit = "10", offset = "1" } = request;
+    const result = await houseService.getHouses(offset, limit);
+    logger.debug("get houses result: ", result);
     return buildApiGatewayOkResponse({ response: result });
   }
 }
