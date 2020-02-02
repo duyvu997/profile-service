@@ -1,0 +1,14 @@
+# Package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+.build
+
+# Visual studio 
+.vscode
+
+# Output of testing
+.nyc_output
+coverage

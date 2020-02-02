@@ -1,0 +1,45 @@
+service: profile-service
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'local'}
+  region: us-east-1
+  runtime: nodejs10.x
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: s3:GetObject
+      Resource: arn:aws:s3:::*/*
+
+  environment:
+    mongoUri: ${self:custom.mongoUri.${self:provider.stage}}
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  
+package:
+  include:
+  exclude:
+
+functions:
+  createProfile:
+    handler: profile/handler.createProfile
+    events:
+      - http:
+          path: user
+          method: post
+          private: true
+  login:
+    handler: profile/handler.login
+    events:
+      - http:
+          path: login
+          method: post
+          private: true
+          
+
+custom:
+  mongoUri:
+    local: mongodb://localhost:27017/profile
+    dev: ${ssm:/renthouse/profile/dev/mongoUri}
