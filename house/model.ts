@@ -1,3 +1,4 @@
+  // tslint:disable: variable-name
 import { prop, Typegoose } from "@hasezoey/typegoose";
 import * as mongoose from "mongoose";
 

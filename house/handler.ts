@@ -29,8 +29,11 @@ export class HouseHandler {
       logger.error(JSON.stringify(error));
       return buildApiGatewayServerFailure();
     }
-    const { limit = "10", offset = "1" } = request;
-    const result = await houseService.getHouses(offset, limit);
+    const { limit = "10", offset = "1", street, district, ward, city, position, releaseStateType, minArea, maxArea, minPrice, maxPrice, interiorFloor, interiorRoom } = request;
+    const params = {
+      street, district, ward, city, position, releaseStateType, minArea, maxArea, minPrice, maxPrice, interiorFloor, interiorRoom
+    };
+    const result = await houseService.getHouses(offset, limit, params);
     logger.debug("get houses result: ", result);
     return buildApiGatewayOkResponse({ response: result });
   }
