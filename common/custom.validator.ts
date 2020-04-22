@@ -1,11 +1,12 @@
+// tslint:disable: max-classes-per-file
 import {
-    ValidationArguments,
-    Validator,
-    ValidatorConstraint,
-    ValidatorConstraintInterface
-  } from "class-validator";
+  ValidationArguments,
+  Validator,
+  ValidatorConstraint,
+  ValidatorConstraintInterface
+} from "class-validator";
 
-  @ValidatorConstraint({ name: "isIntergerNumber", async: false })
+@ValidatorConstraint({ name: "isIntergerNumber", async: false })
 export class IsIntergerNumber implements ValidatorConstraintInterface {
   public validate(propertyValue: string, args: ValidationArguments) {
     return Number.isInteger(Number(propertyValue));

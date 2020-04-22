@@ -34,7 +34,6 @@ export class Db {
         useNewUrlParser: true,
         // To opt in to using the new topology engine
         useUnifiedTopology: true,
-        
       } as mongoose.ConnectionOptions)
       .catch((e: any) => {
         throw e;
