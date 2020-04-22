@@ -11,8 +11,8 @@ export class Db {
       if (!this.listenersRegistered) {
         this.listenersRegistered = true;
       }
+      mongoose.set("debug", true);
       this.conn = await this.getConn();
-    } else {
     }
     return this.conn;
   }
@@ -33,7 +33,7 @@ export class Db {
         useFindAndModify: false,
         useNewUrlParser: true,
         // To opt in to using the new topology engine
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
       } as mongoose.ConnectionOptions)
       .catch((e: any) => {
         throw e;
