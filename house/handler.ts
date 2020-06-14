@@ -40,11 +40,6 @@ export class HouseHandler {
       return buildApiGatewayServerFailure();
     }
 
-    try {
-
-    } catch (error) {
-
-    }
     const result = await houseService.getHouses(pageIndex, pageSize, filter);
     logger.debug("get houses result: ", result);
     return buildApiGatewayOkResponse({ response: result });

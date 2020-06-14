@@ -1,6 +1,6 @@
-import { getHouses } from "./handler";
+import { getHouses } from "../handler";
 import { expect } from "chai";
-import { setup, cleanup } from "./test.util";
+import { setup, cleanup } from "../test.util";
 const context = {};
 
 describe("#getHouses", () => {
