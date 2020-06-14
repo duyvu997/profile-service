@@ -5,15 +5,14 @@ import {
   APIGatewayProxyResult
 } from "aws-lambda";
 import {
-  buildApiGatewayOkResponse,
-  buildApiGatewayServerFailure
+  buildApiGatewayOkResponse, buildApiGatewayBadRequest,
 } from "aws-lambda-response-builder";
 import { houseService } from "./service";
-import { transformAndValidate } from "class-transformer-validator";
-import { GetHouseFilterRequest } from "./handler.model";
+import { GetHousesRequest } from "./handler.model";
 import { logger } from "../common/logger";
 import { getPaginationParams } from "../common/pagination-utils";
-
+import * as _ from "lodash"
+import { houseValidator } from "./validate";
 export class HouseHandler {
 
   @connectDb
@@ -21,7 +20,6 @@ export class HouseHandler {
     event: APIGatewayProxyEvent,
     context: Context
   ): Promise<APIGatewayProxyResult> {
-    let request: GetHouseFilterRequest;
     // todo: filter houses by params: price, location, distance, amenities, room type, capacity, 
     // sort by:  relatest, newest, price from low => high, high => low.
     // room type: ktx, can ho, cua hang, nha xuong, phong tro, 
@@ -29,18 +27,15 @@ export class HouseHandler {
     // location: and  distance around location,
     // amenities: using utf8. 
     const { pageIndex, pageSize, filter } = getPaginationParams(event);
-    console.log("filter object: ", filter);
+    let filterRequest: GetHousesRequest
     try {
-      request = await transformAndValidate(
-        GetHouseFilterRequest,
-        filter
-      );
+      filterRequest = await houseValidator.validateFilterRequest(filter);
     } catch (error) {
-      logger.error(JSON.stringify(error));
-      return buildApiGatewayServerFailure();
+      logger.error("False when validate get house request ", error);
+      return buildApiGatewayBadRequest({message: error.message});
     }
-
-    const result = await houseService.getHouses(pageIndex, pageSize, filter);
+    console.log("filter: ", filterRequest);
+    const result = await houseService.getHouses(pageIndex, pageSize, filterRequest);
     logger.debug("get houses result: ", result);
     return buildApiGatewayOkResponse({ response: result });
   }

@@ -1,9 +1,10 @@
-import { IsNumberString, IsOptional, Validate, ValidateIf, IsNumber, IsNotEmpty } from "class-validator";
+import { IsNumberString, IsOptional, Validate, ValidateIf, IsNumber, IsNotEmpty, IsEnum } from "class-validator";
 import {
   IsIntergerNumber,
   IsPositiveNumberString
 } from "../common/custom.validator"
 import { Type } from "class-transformer";
+import { ReleaseTypeEnum } from "./house.enum";
 export class GetHouseRequest {
   @IsOptional()
   @IsNumberString()
@@ -49,7 +50,18 @@ export class GetHouseRequest {
   @IsOptional()
   public interiorRoom: number;
 }
-export class GetHouseFilterRequest {
+export interface IHouseFilterProperties {
+  lat?: number;
+  lgn?: number;
+  radius?:number;
+  minPrice?: number;
+  maxPrice?: number;
+  releaseType?: ReleaseTypeEnum;
+  district?: string;
+  city?: string;
+  amenities?: string;
+}
+export class GetHousesRequest implements IHouseFilterProperties {
   @ValidateIf(o => o.lgn !== undefined)
   @IsNotEmpty()
   @IsNumber()
@@ -63,11 +75,26 @@ export class GetHouseFilterRequest {
   public lgn: number;
   
 
+  @IsOptional()
   public radius: number;
+
+  @IsOptional()
   public minPrice: number;
+
+  @IsOptional()
   public maxPrice: number;
-  public releaseType: string; // todo: ReleaseTypeEnum;
+
+  @IsOptional()
+  @IsEnum(ReleaseTypeEnum)
+  public releaseType: ReleaseTypeEnum;
+
+  @IsOptional()
   public district: string;// todo: DistrictEnum;
+  
+  @IsOptional()
   public city: string; // todo: CityEnum;
+  
+  @IsOptional()
   public amenities: string// todo: AmenitiesEnum;
+
 }
