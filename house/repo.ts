@@ -43,7 +43,7 @@ export class HouseRepository {
   }
 
   private buildQueryByDistrict(district?: string) {
-    return district ? { attr_addr_district: DistrictEnum[district] } : undefined;
+    return district ? { address_district: DistrictEnum[district] } : undefined;
   };
 
   private buildQueryByPrice(minPrice?: number, maxPrice?: number) {
@@ -56,11 +56,11 @@ export class HouseRepository {
     minPrice ? queryByMin = { $gte: Number(minPrice) } : undefined;
     maxPrice ? queryByMax = { $lte: Number(maxPrice) } : undefined;
 
-    return { attr_price_min: { ...queryByMin, ...queryByMax } }
+    return { price_rent: { ...queryByMin, ...queryByMax } }
   };
 
   private buildQueryByReleaseType(releaseType?: ReleaseTypeEnum) {
-    return releaseType ? { attr_release_type: ReleaseTypeEnum[releaseType] } : undefined
+    return releaseType ? { realestate_type: ReleaseTypeEnum[releaseType] } : undefined
   }
 }
 

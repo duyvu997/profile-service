@@ -33,7 +33,7 @@ functions:
 
 custom:
   mongoUri:
-    local: mongodb://localhost:27017/rent-house
+    local: mongodb://localhost:27017/house_db
     dev: ${ssm:/renthouse/house/dev/mongoUri}
   defaultRadius:
     local: 2000
