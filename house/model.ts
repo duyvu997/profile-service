@@ -34,7 +34,7 @@ export class House extends Typegoose {
   public attr_addr_street: string;
 
   @prop()
-  public attr_addr_district: string;
+  public address_district: number;
 
   @prop()
   public attr_addr_ward: string;
@@ -55,7 +55,7 @@ export class House extends Typegoose {
   public attr_price: string;
 
   @prop()
-  public attr_price_min: string;
+  public price_rent: string;
 
   @prop()
   public attr_price_max: string;
@@ -70,7 +70,7 @@ export class House extends Typegoose {
   public attr_interior_room: string;
 
   @prop()
-  public attr_release_type: string;
+  public realestate_type: number;
 
   @prop()
   public attr_potential: string;
