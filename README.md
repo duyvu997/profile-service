@@ -1,4 +1,4 @@
-# RENTHOUSE - House Microservices
+# RENTHOUSE - Profile Microservices
 
 This repository contains the implementation of a microservice to provide house management function to RENTHOUSE including: get houses, get house detail,... This base around and AWS serverless architecture with the following important technologies:
 
@@ -21,3 +21,6 @@ This repository contains the implementation of a microservice to provide house m
 * Yarn
 * Visual Studio Code
 * Docker
+
+## Deploy
+*  serverless deploy --force --aws-profile rent-house --stage dev 

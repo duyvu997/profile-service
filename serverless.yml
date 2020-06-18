@@ -1,4 +1,4 @@
-service: house-service
+service: profile-service
 
 provider:
   name: aws
@@ -13,7 +13,6 @@ provider:
 
   environment:
     mongoUri: ${self:custom.mongoUri.${self:provider.stage}}
-    defaultRadius: ${self:custom.defaultRadius.${self:provider.stage}}
 
 plugins:
   - serverless-plugin-typescript
@@ -24,17 +23,14 @@ package:
   exclude:
 
 functions:
-  getHouses:
-    handler: house/handler.getHouses
+  socialLoginZalo:
+    handler: profile/handler.socialLoginZalo
     events:
       - http:
-          path: houses
-          method: get
+          path: /login/zalo
+          method: post
 
 custom:
   mongoUri:
-    local: mongodb://localhost:27017/house_db
-    dev: ${ssm:/renthouse/house/dev/mongoUri}
-  defaultRadius:
-    local: 2000
-    dev: ${ssm:/renthouse/house/dev/defaultRadius}
+    local: mongodb://localhost:27017/profile_db
+    dev: ${ssm:/renthouse/profile/dev/mongoUri}
