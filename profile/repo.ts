@@ -1,69 +1,38 @@
-// import { houseModel } from "./model";
-// import { IHouseFilterProperties } from "./handler.model";
-// import { DistrictEnum, ReleaseTypeEnum } from "./house.enum";
-// const DEFAULT_RADIUS = Number(process.env.DefaultRadius) | 20000;
+import { IZaloUserData } from "../gateway/zalo/zalo.model";
+import { profileModel, Profile } from "./model";
+import { ProfileType } from "./profile.enum";
+import { nameof } from "..//common/custom.function"
 
-// export class HouseRepository {
-//   public async getHouses(offset: number, limit: number, filterObject: IHouseFilterProperties): Promise<any> {
-//     const { lat, lgn } = filterObject;
-//     const query = lat && lgn ? this.buildQueryByLocation(filterObject) : this.buildNormalQuery(filterObject);
-//     return houseModel.aggregate([
-//       query,
-//       { $skip: limit * (offset) },
-//       { $limit: limit }
-//     ]);
-//   }
-//   private buildQueryByLocation(filterObject: IHouseFilterProperties) {
-//     const { lat, lgn, radius = DEFAULT_RADIUS } = filterObject;
-//     return {
-//       $geoNear: {
-//         near: { type: "Point", coordinates: [lat, lgn] },
-//         distanceField: "dist.calculated",
-//         maxDistance: radius,
-//         query: this.buildQuery(filterObject),
-//         includeLocs: "dist.location",
-//         spherical: true
-//       }
-//     }
-//   }
+export class HouseRepository {
+  public async saveZaloUser( code: string, scope: string[], userInfo: IZaloUserData): Promise<any> {
+    console.log('userInfo: ', userInfo);
+    const profileToBeSaved = {
+      profileId: userInfo.id,
+      zaloCode: code,
+      zaloScope: scope,
+      birthday: userInfo.birthday,
+      gender: userInfo.gender,
+      name: userInfo.name,
+      pictureUrl: userInfo.picture.data.url,
+      type: ProfileType.ZALO,
+    } as Profile;
+    return profileModel.create(profileToBeSaved);
+  };
+  public async countByZaloCode(code: string): Promise<number> {
+    const condition = {
+      [nameof<Profile>("zaloCode")]: code
+    }
+    return profileModel.count(condition);
+  }
+  public async getByZaloCode(code: string){
+    const condition = {
+      [nameof<Profile>("zaloCode")]: code
+    }
+    return profileModel.findOne(condition);
+  }
 
-//   private buildNormalQuery(filterObject: IHouseFilterProperties) {
-//     return { $match: this.buildQuery(filterObject) }
-//   }
+}
 
-//   private buildQuery(filterObject: IHouseFilterProperties): Object {
-//     const { maxPrice, minPrice, releaseType, district } = filterObject;
-//     const result = {
-//       ...this.buildQueryByDistrict(district),
-//       ...this.buildQueryByPrice(minPrice, maxPrice),
-//       ...this.buildQueryByReleaseType(releaseType)
-//     };
-//     console.log('build query: ', result);
-//     return result;
-//   }
-
-//   private buildQueryByDistrict(district?: string) {
-//     return district ? { address_district: DistrictEnum[district] } : undefined;
-//   };
-
-//   private buildQueryByPrice(minPrice?: number, maxPrice?: number) {
-//     if (!maxPrice && !minPrice) {
-//       return;
-//     }
-//     let queryByMax = {};
-//     let queryByMin = {};
-
-//     minPrice ? queryByMin = { $gte: Number(minPrice) } : undefined;
-//     maxPrice ? queryByMax = { $lte: Number(maxPrice) } : undefined;
-
-//     return { price_rent: { ...queryByMin, ...queryByMax } }
-//   };
-
-//   private buildQueryByReleaseType(releaseType?: ReleaseTypeEnum) {
-//     return releaseType ? { realestate_type: ReleaseTypeEnum[releaseType] } : undefined
-//   }
-// }
-
-// export const houseRepository = new HouseRepository();
+export const profileRepository = new HouseRepository();
 
 
