@@ -10,6 +10,7 @@ import {
 import * as _ from "lodash"
 import { ZaloReDirect } from "./handler.model";
 import { transformAndValidate } from "class-transformer-validator";
+import { profileService } from "./service";
 export class ProfileHandler {
 
   @connectDb
@@ -18,10 +19,20 @@ export class ProfileHandler {
     context: Context
   ): Promise<APIGatewayProxyResult> {
     let request: ZaloReDirect;
+    
     request = await transformAndValidate(ZaloReDirect, event.queryStringParameters || {});
-    const { uid, code, state, scope } = request;
-    console.log(uid, code, state, scope);
-    return buildApiGatewayOkResponse();
+
+    const { code } = request;
+
+    let { profileId = '' } = await profileService.getByZaloCode(code) || {};
+
+    if (profileId.length == 0) {
+      profileId = (await profileService.create(code)).profileId;
+    };
+
+    let accessToken: string = await profileService.generateToken(profileId);
+
+    return buildApiGatewayOkResponse({ profileId: profileId, accessToken });
   }
 }
 

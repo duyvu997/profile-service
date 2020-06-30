@@ -1,1 +1,1 @@
-export const houseFilterProperty = ['lat','lgn','radius','minPrice','maxPrice','releaseType','district','city','amenities'];
+export const zaloUserScope = ['access_profile','access_friends_list']
