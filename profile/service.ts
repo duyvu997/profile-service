@@ -24,5 +24,8 @@ export class ProfileService {
     }
     return jwt.sign(payload, PROFILE_SECRET_KEY , {expiresIn: TOKEN_EXPIRE_CONFIG} )
   }
+  public async getProfileInformation(profileId: string) {
+    return profileRepository.getProfileInformation(profileId);
+  }
 }
 export const profileService = new ProfileService();

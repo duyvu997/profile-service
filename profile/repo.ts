@@ -18,17 +18,23 @@ export class HouseRepository {
     } as Profile;
     return profileModel.create(profileToBeSaved);
   };
+
   public async countByZaloCode(code: string): Promise<number> {
     const condition = {
       [nameof<Profile>("zaloCode")]: code
     }
     return profileModel.count(condition);
   }
+
   public async getByZaloCode(code: string){
     const condition = {
       [nameof<Profile>("zaloCode")]: code
     }
     return profileModel.findOne(condition);
+  }
+
+  public async getProfileInformation(profileId:string){
+    return profileModel.findOne({[nameof<Profile>("profileId")]: profileId});
   }
 
 }
