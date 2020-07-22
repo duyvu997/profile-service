@@ -8,7 +8,7 @@ import {
   buildApiGatewayOkResponse, buildApiGatewayUnauthorized,
 } from "aws-lambda-response-builder";
 import * as _ from "lodash"
-import { ZaloReDirect, IProfilePayload } from "./handler.model";
+import { ZaloReDirect, IProfilePayload, FacebookReDirect } from "./handler.model";
 import { transformAndValidate } from "class-transformer-validator";
 import { profileService } from "./service";
 import { ERROR_CODE } from "../common/error";
@@ -21,7 +21,7 @@ export class ProfileHandler {
     context: Context
   ): Promise<APIGatewayProxyResult> {
     let request: ZaloReDirect;
-    
+
     request = await transformAndValidate(ZaloReDirect, event.queryStringParameters || {});
 
     const { code } = request;
@@ -29,7 +29,29 @@ export class ProfileHandler {
     let { profileId = '' } = await profileService.getByZaloCode(code) || {};
 
     if (profileId.length == 0) {
-      profileId = (await profileService.create(code)).profileId;
+      profileId = (await profileService.createZaloUser(code)).profileId;
+    };
+
+    let accessToken: string = await profileService.generateToken(profileId);
+
+    return buildApiGatewayOkResponse({ profileId: profileId, accessToken });
+  }
+
+  @connectDb
+  public async socialLoginFacebook(
+    event: APIGatewayProxyEvent,
+    context: Context
+  ): Promise<APIGatewayProxyResult> {
+    let request: FacebookReDirect;
+
+    request = await transformAndValidate(FacebookReDirect, event.queryStringParameters || {});
+
+    const { access_token: fbAccessToken } = request;
+
+    let { profileId = '' } = await profileService.getByFBAccessToken(fbAccessToken) || {};
+    
+    if (profileId.length == 0) {
+      profileId = (await profileService.createFacebookUser(fbAccessToken)).profileId;
     };
 
     let accessToken: string = await profileService.generateToken(profileId);
@@ -51,7 +73,7 @@ export class ProfileHandler {
       }
     }
     const { profileId } = authPayload;
-    const response =  await profileService.getProfileInformation(profileId);
+    const response = await profileService.getProfileInformation(profileId);
     return buildApiGatewayOkResponse({ response });
   }
 }
@@ -59,5 +81,7 @@ export class ProfileHandler {
 const profileHandler = new ProfileHandler();
 export const socialLoginZalo = (event: any, context?: any) =>
   profileHandler.socialLoginZalo(event, context);
-  export const getProfileInformation = (event: any, context?: any) =>
+export const getProfileInformation = (event: any, context?: any) =>
   profileHandler.getProfileInformation(event, context);
+export const socialLoginFacebook = (event: any, context?: any) =>
+  profileHandler.socialLoginFacebook(event, context);
