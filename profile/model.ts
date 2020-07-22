@@ -4,10 +4,10 @@ import { ProfileType } from "./profile.enum";
 
 export class Profile extends Typegoose {
   @prop()
-  public birthday: string;
+  public birthday?: string;
 
   @prop()
-  public gender: string;
+  public gender?: string;
 
   @prop()
   public name: string;
@@ -16,19 +16,25 @@ export class Profile extends Typegoose {
   public profileId: string;
 
   @prop()
-  public pictureUrl: string;
+  public pictureUrl?: string;
 
   @prop({ enum: ProfileType })
-  public type: ProfileType;
+  public type?: ProfileType;
 
   @prop()
   public phoneNumber?: string;
 
   @prop()
-  public zaloCode: string;
+  public zaloCode?: string;
 
   @prop()
-  public zaloScope: string[];
+  public zaloScope?: string[];
+
+  @prop()
+  public fbAccessToken?: string;
+
+  @prop()
+  public fbScope?: string[];
 
 }
 

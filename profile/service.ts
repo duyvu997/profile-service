@@ -3,11 +3,17 @@ import { zaloService } from "../gateway/zalo/zalo.service";
 import * as jwt from "jsonwebtoken";
 import { PROFILE_SECRET_KEY, TOKEN_EXPIRE_CONFIG } from "./profile.constanst";
 import { zaloUserScope } from "./house.constant";
+import { facebookService } from "../gateway/facebook/facebook.service";
 
 export class ProfileService {
-  public async create( code: string) {
+  public async createZaloUser( code: string) {
     const userInfo = await zaloService.getUserInformation(code);
     return profileRepository.saveZaloUser( code, zaloUserScope, userInfo);
+  };
+
+  public async createFacebookUser( code: string) {
+    const userInfo = await facebookService.getUserInformation(code);
+    return profileRepository.saveFacebookUser( code, userInfo);
   };
 
   public async doesProfileCreated(code: string): Promise<boolean> {
@@ -17,7 +23,10 @@ export class ProfileService {
   public async getByZaloCode(code: string) {
     return profileRepository.getByZaloCode(code);
   }
-
+  
+  public async getByFBAccessToken(fbAccessToken: string) {
+    return profileRepository.getByFBAccessToken(fbAccessToken);
+  }
   public async generateToken(uid: string): Promise<string> {
     const payload = {
       profileId: uid
