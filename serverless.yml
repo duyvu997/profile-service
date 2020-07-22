@@ -33,6 +33,12 @@ functions:
       - http:
           path: /login/zalo
           method: post
+  getProfileInformation:
+    handler: profile/handler.getProfileInformation
+    events:
+      - http:
+          path: /profile/me
+          method: get
 
 custom:
   mongoUri:
