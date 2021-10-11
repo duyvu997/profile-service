@@ -1,6 +1,6 @@
 import { prop, Typegoose } from "@hasezoey/typegoose";
 import * as mongoose from "mongoose";
-import { ProfileType } from "./profile.enum";
+import { ProfileType } from "./constant";
 
 export class Profile extends Typegoose {
   @prop()

@@ -1,6 +1,6 @@
 import { IZaloUserData } from "../gateway/zalo/zalo.model";
 import { profileModel, Profile } from "./model";
-import { ProfileType } from "./profile.enum";
+import { ProfileType } from "./constant";
 import { nameof } from "..//common/custom.function"
 import { IFacebookData } from "../gateway/facebook/facebook.model";
 

@@ -1,8 +1,8 @@
 import { profileRepository } from "./repo";
 import { zaloService } from "../gateway/zalo/zalo.service";
 import * as jwt from "jsonwebtoken";
-import { PROFILE_SECRET_KEY, TOKEN_EXPIRE_CONFIG } from "./profile.constanst";
-import { zaloUserScope } from "./house.constant";
+import { PROFILE_SECRET_KEY, TOKEN_EXPIRE_CONFIG } from "./constant";
+import { zaloUserScope } from "./constant";
 import { facebookService } from "../gateway/facebook/facebook.service";
 
 export class ProfileService {
