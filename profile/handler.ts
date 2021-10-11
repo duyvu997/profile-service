@@ -2,35 +2,38 @@ import { connectDb } from "../common/aop";
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
-  Context
+  Context,
 } from "aws-lambda";
 import {
-  buildApiGatewayOkResponse, buildApiGatewayUnauthorized,
+  buildApiGatewayOkResponse,
+  buildApiGatewayUnauthorized,
 } from "aws-lambda-response-builder";
-import * as _ from "lodash"
-import { ZaloReDirect, IProfilePayload, FacebookReDirect } from "./handler.model";
+import * as _ from "lodash";
+import {
+  ZaloReDirect,
+  IProfilePayload,
+  FacebookReDirect,
+} from "./handler.model";
 import { transformAndValidate } from "class-transformer-validator";
 import { profileService } from "./service";
 import { ERROR_CODE } from "../common/error";
 import { getAuthPayload } from "../common/authenticate.utils";
 export class ProfileHandler {
-
   @connectDb
   public async socialLoginZalo(
     event: APIGatewayProxyEvent,
     context: Context
   ): Promise<APIGatewayProxyResult> {
-    let request: ZaloReDirect;
+    const { code } = await transformAndValidate(
+      ZaloReDirect,
+      event.queryStringParameters || {}
+    );
 
-    request = await transformAndValidate(ZaloReDirect, event.queryStringParameters || {});
-
-    const { code } = request;
-
-    let { profileId = '' } = await profileService.getByZaloCode(code) || {};
+    let { profileId = "" } = (await profileService.getByZaloCode(code)) || {};
 
     if (profileId.length == 0) {
       profileId = (await profileService.createZaloUser(code)).profileId;
-    };
+    }
 
     let accessToken: string = await profileService.generateToken(profileId);
 
@@ -42,17 +45,18 @@ export class ProfileHandler {
     event: APIGatewayProxyEvent,
     context: Context
   ): Promise<APIGatewayProxyResult> {
-    let request: FacebookReDirect;
+    const { access_token: fbAccessToken } = await transformAndValidate(
+      FacebookReDirect,
+      event.queryStringParameters || {}
+    );
 
-    request = await transformAndValidate(FacebookReDirect, event.queryStringParameters || {});
+    let { profileId = "" } =
+      (await profileService.getByFBAccessToken(fbAccessToken)) || {};
 
-    const { access_token: fbAccessToken } = request;
-
-    let { profileId = '' } = await profileService.getByFBAccessToken(fbAccessToken) || {};
-    
     if (profileId.length == 0) {
-      profileId = (await profileService.createFacebookUser(fbAccessToken)).profileId;
-    };
+      profileId = (await profileService.createFacebookUser(fbAccessToken))
+        .profileId;
+    }
 
     let accessToken: string = await profileService.generateToken(profileId);
 
@@ -66,10 +70,12 @@ export class ProfileHandler {
   ): Promise<APIGatewayProxyResult> {
     let authPayload = {} as IProfilePayload;
     try {
-      authPayload = getAuthPayload(event) as IProfilePayload
+      authPayload = getAuthPayload(event) as IProfilePayload;
     } catch (error) {
       if (error.message === ERROR_CODE.UNAUTHORIZED) {
-        return buildApiGatewayUnauthorized({ error: { message: "Missing Authentication" } });
+        return buildApiGatewayUnauthorized({
+          error: { message: "Missing Authentication" },
+        });
       }
     }
     const { profileId } = authPayload;
